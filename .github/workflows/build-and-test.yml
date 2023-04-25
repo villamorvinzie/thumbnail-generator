@@ -1,0 +1,17 @@
+# Workflow for building and testing the application.
+name: build-and-test
+
+# Triggers the workflow on push or pull request events but only for the "main" branch.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# This workflow contains "build" and "test" jobs.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v3

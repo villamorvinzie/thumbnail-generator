@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import com.villamorvinzie.thumbnailgenerator.config.S3Config;
 import com.villamorvinzie.thumbnailgenerator.services.S3Service;
 
+import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Service
+@Log4j2
 public class S3ServiceImpl implements S3Service {
 
     private S3Config s3Config;
@@ -20,6 +22,7 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public byte[] getObjectBytes(String key) {
+        log.info("Downloading object with key: {}, bucket: {}", key, s3Config.getBucketName());
         return s3Client.getObjectAsBytes(builder -> {
             builder.bucket(s3Config.getBucketName());
             builder.key(key);

@@ -1,5 +1,6 @@
 package com.villamorvinzie.thumbnailgenerator.functions;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 import org.springframework.context.annotation.Bean;
@@ -23,7 +24,7 @@ public class ThumbnailGeneratorHandler {
     }
 
     @Bean
-    public Consumer<String> handles() {
+    public Consumer<Map<String, String>> handles() {
         return (in) -> {
             log.info(in);
         };

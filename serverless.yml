@@ -12,5 +12,11 @@ package:
   artifact: target/thumbnail-generator-1.0-aws.jar
 
 functions:
-  handler:
+  main:
     handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+    events:
+      - s3: vinziev-thumbnail-generator-images
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: uploads/
+          - suffix: .jpg

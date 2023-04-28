@@ -8,15 +8,24 @@ provider:
   stage: prod
   region: us-east-1
 
+custom:
+  serviceName: ${self:service}
+  imagesS3Bucket: vinziev-thumbnail-generator-images
+
 package:
   artifact: target/thumbnail-generator-1.0-aws.jar
 
 functions:
   main:
     handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+    role: mainIamRole
     events:
-      - s3: vinziev-thumbnail-generator-images
-        event: s3:ObjectCreated:*
-        rules:
+      - s3: 
+          bucket: ${self:custom.imagesS3Bucket}
+          event: s3:ObjectCreated:*
+          rules:
           - prefix: uploads/
           - suffix: .jpg
+
+resources:
+  - ${file(./cloudformation/iam/roles.yml)}

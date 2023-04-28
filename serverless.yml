@@ -1,0 +1,16 @@
+service: thumbnail-generator
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: java17
+  stage: prod
+  region: us-east-1
+
+package:
+  artifact: target/thumbnail-generator-1.0-aws.jar
+
+functions:
+  handler:
+    handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest

@@ -1,8 +1,6 @@
 package com.villamorvinzie.thumbnailgenerator.functions;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -10,7 +8,10 @@ import org.springframework.stereotype.Component;
 import com.villamorvinzie.thumbnailgenerator.services.ImageService;
 import com.villamorvinzie.thumbnailgenerator.services.S3Service;
 
+import lombok.extern.log4j.Log4j2;
+
 @Component
+@Log4j2
 public class ThumbnailGeneratorHandler {
 
     private ImageService imageService;
@@ -22,18 +23,9 @@ public class ThumbnailGeneratorHandler {
     }
 
     @Bean
-    public Supplier<String> asd(){
-        return ()->"ASDASD";
-    }
-
-    @Bean
-    public Function<String, String> handle() {
-        return (in) -> "out";
-    }
-
-    @Bean
     public Consumer<String> handles() {
         return (in) -> {
+            log.info(in);
         };
     }
 }

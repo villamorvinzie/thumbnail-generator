@@ -1,11 +1,14 @@
 package com.villamorvinzie.thumbnailgenerator.services.impl;
 
+import java.io.File;
+
 import org.springframework.stereotype.Service;
 
 import com.villamorvinzie.thumbnailgenerator.config.S3Config;
 import com.villamorvinzie.thumbnailgenerator.services.S3Service;
 
 import lombok.extern.log4j.Log4j2;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Service
@@ -27,6 +30,16 @@ public class S3ServiceImpl implements S3Service {
             builder.bucket(s3Config.getBucketName());
             builder.key(key);
         }).asByteArray();
+    }
+
+    @Override
+    public void putObject(String key, File file) {
+        log.info("Uploading object with key: {}, file: {}", key, file.getAbsolutePath());
+        s3Client.putObject(putObjReq -> {
+            putObjReq.bucket(s3Config.getBucketName());
+            putObjReq.key(key);
+            putObjReq.build();
+        }, RequestBody.fromFile(file));
     }
 
 }

@@ -26,6 +26,9 @@ functions:
           rules:
           - prefix: uploads/
           - suffix: .jpg
+    environment:
+      S3_REGION: ${self:provider.region}
+      S3_BUCKET_NAME: ${self:custom.imagesS3Bucket}
 
 resources:
   - ${file(./cloudformation/iam/roles.yml)}

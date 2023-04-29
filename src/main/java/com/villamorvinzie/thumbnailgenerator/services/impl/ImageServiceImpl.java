@@ -25,8 +25,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void simpleResizeImage(File fileImg, int targetWidth) throws IOException {
-        String modifiedLabel = "modified";
+    public File simpleResizeImage(File fileImg, int targetWidth, String targetPath) throws IOException {
         String defaultExt = "jpg";
         String defaultFilename = "test";
         String fullFilename = fileImg.getName();
@@ -36,10 +35,11 @@ public class ImageServiceImpl implements ImageService {
         BufferedImage resizedImg = scalr.resize(bufferedImage, targetWidth);
         String filename = getFilename(fullFilename).orElse(defaultFilename);
         String ext = getFileExtension(fullFilename).orElse(defaultExt);
-        File outputfile = new File(String.format("%s-%s.%s", filename, modifiedLabel, ext));
+        File outputfile = new File(String.format("%s/%s.%s", targetPath, filename, ext));
 
         log.info("Writing image into disk: {}", outputfile.getAbsolutePath());
         ImageIO.write(resizedImg, ext, outputfile);
+        return outputfile;
     }
 
     private Optional<String> getFileExtension(String fullFilename) {

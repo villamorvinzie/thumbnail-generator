@@ -49,4 +49,4 @@ Resources:
                   Fn::Join:
                     - ""
                     - - "arn:aws:s3:::"
-                      - ${self:custom.imagesS3Bucket}
+                      - ${self:custom.imagesS3Bucket}/*

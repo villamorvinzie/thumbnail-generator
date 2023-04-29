@@ -1,8 +1,14 @@
 package com.villamorvinzie.thumbnailgenerator.functions;
 
-import java.util.Map;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +30,54 @@ public class ThumbnailGeneratorHandler {
     }
 
     @Bean
-    public Consumer<Map<String, String>> handles() {
+    public Consumer<String> handle() {
+
         return (in) -> {
-            log.info(in);
+            final String tmp = "/tmp/";
+            final String thumbnails = "thumbnails";
+            final String uploadsPath = tmp + "uploads";
+            final String modifiedTargetPath = tmp + thumbnails;
+
+            // Create upload and modified directory if it does not exist.
+            try {
+                Files.createDirectories(Path.of(uploadsPath));
+                Files.createDirectories(Path.of(modifiedTargetPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            JSONObject root = new JSONObject(in);
+            JSONArray records = root.getJSONArray("Records");
+
+            records.forEach(record -> {
+
+                try {
+
+                    JSONObject rec = (JSONObject) record;
+                    JSONObject s3 = rec.getJSONObject("s3");
+                    JSONObject object = s3.getJSONObject("object");
+                    String key = object.getString("key");
+                    String tmpKey = tmp.concat(key);
+
+                    log.info("Creating new file: {}", tmpKey);
+                    File file = new File(tmpKey);
+                    file.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(file);
+                    byte[] objBytes = s3Service.getObjectBytes(key);
+                    fos.write(objBytes);
+                    File outputFile = imageService.simpleResizeImage(file, 320, modifiedTargetPath);
+
+                    String newObjKey = String.format("%s/%s", thumbnails, outputFile.getName());
+                    s3Service.putObject(newObjKey, outputFile);
+
+                    fos.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            });
+
         };
     }
 }

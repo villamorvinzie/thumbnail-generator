@@ -4,5 +4,5 @@ import java.io.File;
 import java.io.IOException;
 
 public interface ImageService {
-    void simpleResizeImage(File fileImg, int targetWidth) throws IOException;
+    File simpleResizeImage(File fileImg, int targetWidth, String targetPath) throws IOException;
 }

@@ -46,3 +46,4 @@ jobs:
             my-artifacts
             target/thumbnail-generator-1.0-aws.jar
             serverless.yml
+            cloudformation

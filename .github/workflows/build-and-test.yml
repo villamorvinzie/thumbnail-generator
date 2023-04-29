@@ -26,4 +26,4 @@ jobs:
       # Build application
       - name: Build application
         run: |
-          ./mnvw clean package
+          ./mvnw clean package

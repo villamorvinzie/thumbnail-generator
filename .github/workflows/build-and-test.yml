@@ -26,4 +26,5 @@ jobs:
       # Build application
       - name: Build application
         run: |
+          chmod 777 ./mvnw
           ./mvnw clean package

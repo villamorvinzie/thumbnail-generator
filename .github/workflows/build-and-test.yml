@@ -3,10 +3,11 @@ name: build-and-test
 
 # Triggers the workflow on push or pull request events but only for the "main" branch.
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_call:
+    inputs:
+      ARTIFACT_NAME:
+        type: string
+        required: true
 
 # This workflow contains "build" and "test" jobs.
 jobs:
@@ -20,11 +21,17 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v1.4.4
         with:
-          distribution: 'corretto'
-          java-version: '17'
+          distribution: "corretto"
+          java-version: "17"
 
       # Build application
       - name: Build application
         run: |
           chmod 777 ./mvnw
           ./mvnw clean package
+
+      - name: Upload app artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.ARTIFACT_NAME }}
+          path: thumbnail-generator-1.0-aws.jar

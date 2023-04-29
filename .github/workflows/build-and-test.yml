@@ -15,3 +15,15 @@ jobs:
     steps:
       # Checks-out repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
+
+      # Setup Java JDK
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      # Build application
+      - name: Build application
+        run: |
+          ./mnvw clean package

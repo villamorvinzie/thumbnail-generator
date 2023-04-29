@@ -41,4 +41,4 @@ jobs:
 
       - name: Release application
         run: |
-          serverless deploy
+          serverless deploy --package my-artifacts

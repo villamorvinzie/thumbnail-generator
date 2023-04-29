@@ -14,24 +14,35 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
 
-      # Setup Java JDK
       - name: Setup Java JDK
         uses: actions/setup-java@v1.4.4
         with:
           distribution: "corretto"
           java-version: "17"
 
-      # Build application
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.5.2
+
+      - name: Install Severless Framework
+        run: |
+          npm install -g serverless
+
       - name: Build application
         run: |
           chmod 777 ./mvnw
           ./mvnw clean package
 
+      - name: Package serverless
+        run: |
+          serverless package my-artifacts
+
       - name: Upload app artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.ARTIFACT_NAME }}
-          path: target/thumbnail-generator-1.0-aws.jar
+          path: |
+            my-artifacts
+            target/thumbnail-generator-1.0-aws.jar
+            serverless.yml

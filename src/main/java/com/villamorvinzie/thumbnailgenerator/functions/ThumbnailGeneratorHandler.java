@@ -3,6 +3,7 @@ package com.villamorvinzie.thumbnailgenerator.functions;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -56,7 +57,7 @@ public class ThumbnailGeneratorHandler {
                     JSONObject rec = (JSONObject) record;
                     JSONObject s3 = rec.getJSONObject("s3");
                     JSONObject object = s3.getJSONObject("object");
-                    String key = object.getString("key");
+                    String key = URLDecoder.decode(object.getString("key"), "UTF-8");
                     String tmpKey = tmp.concat(key);
 
                     log.info("Creating new file: {}", tmpKey);
